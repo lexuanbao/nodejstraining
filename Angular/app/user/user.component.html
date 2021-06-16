@@ -1,0 +1,20 @@
+<p>user works!</p>
+<div *ngIf = 'users.length'>
+    <div *ngFor = 'let user of users'>
+        <div id='userId'>
+            {{user.userId}}
+        </div>
+        <div id='userFullName'>
+            {{user.fullNane}}
+        </div>
+        <div id='kanaName'>
+            {{user.kanaName}}
+        </div>
+        <div id='birthDay'>
+            {{user.birthDay}}
+        </div>
+        <button id='btnEdit' (click)='EditButtonOnclick(user)'>Edit</button><br />
+        ---------------------------------------
+    </div>
+</div>
+    
