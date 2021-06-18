@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from '../user'
-import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-user',
@@ -17,15 +16,15 @@ export class UserComponent implements OnInit {
     this.getUser();
   }
 
-  EditButtonOnclick(user: User){
-    document.getElementById('userId').innerHTML = `<input value=${user.userId}>` ;
-    document.getElementById('userFullName').innerHTML = `<input value=${user.fullNane}>`;
-    document.getElementById('kanaName').innerHTML = `<input value=${user.kanaName}>`;
-    document.getElementById('birthDay').innerHTML = `<input value=${user.birthDay}>`;
-    document.getElementById('btnEdit').outerHTML = "<button id='btnSave' (click)='SaveButtonOnclick(user)'>Save</button>"
-  }
+  // EditButtonOnclick(user: User){
+  //   document.getElementById('userId').innerHTML = `<input value=${user.userId}>` ;
+  //   document.getElementById('userFullName').innerHTML = `<input value=${user.fullNane}>`;
+  //   document.getElementById('kanaName').innerHTML = `<input value=${user.kanaName}>`;
+  //   document.getElementById('birthDay').innerHTML = `<input value=${user.birthDay}>`;
+  //   document.getElementById('btnEdit').outerHTML = "<button id='btnSave' (click)='SaveButtonOnclick(user)'>Save</button>"
+  // }
 
-  SaveButtonOnClick(user: User){
+  EditButtonOnclick(user: User){
     this.userService.updateUser(user).subscribe();
   }
 
