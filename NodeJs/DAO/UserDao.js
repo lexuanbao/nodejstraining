@@ -34,6 +34,17 @@ async function updateUser(client, user) {
     }
 }
 
+async function addNewUser(client, user) {
+    const result = await client.db('UserList').collection('user_list').insertOne({userId: user.userId, fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
+    console.log(`New listing created with the following id: ${result.insertedId}`);
+    return result.insertedCount;
+}
+
+async function deleteUserById(client, id) {
+    const result = await client.db('UserList').collection('user_list').deleteOne({userId: id});
+    console.log(`${result.deletedCount} document was deleted`);
+}
+
 var findAll = async function(res) {
 
     const client = new MongoClient(uri, {useUnifiedTopology: true});
@@ -74,4 +85,34 @@ var updateById = async function(req, res) {
     }
 }
 
-module.exports = {findAll, updateById};
+var insertUser = async function (req, res){
+    const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+    try {
+        let user = req.body;
+        await client.connect();
+        let result = await addNewUser(client, user);
+        res.send(JSON.stringify(result));
+    } catch (error) {
+        console.log(error);
+
+    } finally {
+        await client.close()
+    }
+}
+
+var deleteUser = async function (req, res){
+    const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+    try{
+        let id = parseInt(req.params.id);
+        await client.connect();
+        const result = await deleteUserById(client, id);
+    } catch(error) {
+        console.log(error);
+    } finally {
+        await client.close();
+    }
+}
+
+module.exports = {findAll, updateById, insertUser, deleteUser};

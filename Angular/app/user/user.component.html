@@ -1,9 +1,9 @@
 <p>user works!</p>
 <div *ngIf = 'users.length'>
     <div *ngFor = 'let user of users'>
-        <div id='userId'>
+        <a id='userId' routerLink='/users/detai/{{user.userId}}'>
             {{user.userId}}
-        </div>
+        </a>
         <div id='userFullName'>
             {{user.fullNane}}
         </div>
@@ -13,8 +13,11 @@
         <div id='birthDay'>
             {{user.birthDay}}
         </div>
-        <button id='btnEdit' (click)='EditButtonOnclick(user)'>Edit</button><br />
+        <button id='btnEdit' (click)='EditButtonOnclick(user)'>Edit</button>
+        <button id='btnDelete' (click)='DeleteButtonOnclick(user.userId)'>Delete</button><br />
         ---------------------------------------
     </div>
 </div>
+<button id='btnInsert' (click)='AddButtonOnclick()'>Add</button>
+
     

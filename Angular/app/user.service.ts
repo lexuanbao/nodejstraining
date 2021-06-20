@@ -23,4 +23,16 @@ export class UserService {
   updateUser(user: User){
     return this.http.put(this.userURL + '/users', user);
   }
+
+  deleteUser(id: number){
+    return this.http.delete(this.userURL + `/users/${id}`)
+  }
+
+  insertUser(user: User){
+    return this.http.post(this.userURL + '/users', user);
+  }
+
+  getUserById(id: number){
+    return this.http.get<User>(this.userURL + `/users/${id}`);
+  }
 }

@@ -1,0 +1,28 @@
+<p>user-detail works!</p>
+<p style="color: red;">{{message}}</p>
+<table>
+    <tr>
+        <td>userId:</td>
+        <td><input id='userId' type='text' #userId></td>
+    </tr>
+    <tr>
+        <td>fullNane:</td>
+        <td><input id='userFullName' type='text' #fullNane></td>
+    </tr>
+    <tr>
+        <td>kanaName: </td>
+        <td><input id='kanaName' type='text' #kanaName></td>
+    </tr>
+    <tr>
+        <td>birthDay:</td>
+        <td><input id='birthDay' type='text' #birthDay></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button (click)='insertUser(userId.value, fullNane.value, kanaName.value, birthDay.value)'>Save</button>
+            <button (click)='goBack()'>Back</button>
+        </td>
+    </tr>
+</table>
+
