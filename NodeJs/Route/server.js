@@ -34,12 +34,15 @@ app.post('/users', function (req, res){
 });
 
 app.put('/users', function (req, res) {
-    // let id = req.params.userId; chưa cần
     userController.updateById(req, res);
 });
 
 app.delete('/users/:id', function (req, res) {
     userController.deleteUser(req, res);
+})
+
+app.get('/users/:id', function (req, res) {
+    userController.findById(req, res);
 })
 
 var server = app.listen(5000, function () {

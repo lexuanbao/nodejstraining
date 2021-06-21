@@ -20,19 +20,19 @@ export class UserDetailComponent implements OnInit {
     ){}
 
   ngOnInit(): void {
-    this.getUser();
+    this.getUserById();
   }
 
   goBack(){
     this.location.back();
   }
 
-  getUser(){
+  getUserById(){
     const id = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.userService.getUserById(id).subscribe(user => this.user = user);
   }
 
-  insertUser(_userId: string, _fullNane: string, _kanaName: string, _birthDay: string ){
+  SaveButtonOnclick(_userId: string, _fullNane: string, _kanaName: string, _birthDay: string ){
     this.user = {
       userId: parseInt(_userId),
       fullNane: _fullNane,

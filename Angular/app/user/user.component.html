@@ -1,20 +1,23 @@
 <p>user works!</p>
+<p style="color: green;">{{message}}</p>
 <div *ngIf = 'users.length'>
     <div *ngFor = 'let user of users'>
-        <a id='userId' routerLink='/users/detai/{{user.userId}}'>
+        <a id='userId{{user.userId}}' routerLink="detail/{{user.userId}}">
             {{user.userId}}
         </a>
-        <div id='userFullName'>
+        <div id='fullName{{user.userId}}'>
             {{user.fullNane}}
         </div>
-        <div id='kanaName'>
+        <div id='kanaName{{user.userId}}'>
             {{user.kanaName}}
         </div>
-        <div id='birthDay'>
+        <div id='birthDay{{user.userId}}'>
             {{user.birthDay}}
         </div>
-        <button id='btnEdit' (click)='EditButtonOnclick(user)'>Edit</button>
-        <button id='btnDelete' (click)='DeleteButtonOnclick(user.userId)'>Delete</button><br />
+        <button id='btnEdit{{user.userId}}' (click)='EditButtonOnclick(user)'>Edit</button>
+        <button id='btnDelete' (click)='DeleteButtonOnclick(user.userId)'>Delete</button>
+        <button id='btnCance{{user.userId}}' hidden='true' (click)='CancelButtonClick(user)'>Cancel</button>
+        <br />
         ---------------------------------------
     </div>
 </div>
