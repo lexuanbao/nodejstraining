@@ -1,0 +1,8 @@
+<div  *ngIf='user.showFlag'>
+    <div><input id='userId' type='text' #userId value="{{user.userId}}"></div>
+    <div><input id='userFullName' type='text' #fullNane value="{{user.fullNane}}"></div>
+    <div><input id='kanaName' type='text' #kanaName value="{{user.kanaName}}"></div>
+    <div><input id='birthDay' type='text' #birthDay value="{{user.birthDay}}"></div>
+    <button (click)='Cancel()'>Cancel</button>
+    <button (click)='SaveButtonOnclick(userId.value, fullNane.value, kanaName.value, birthDay.value)'>Save</button>
+</div>

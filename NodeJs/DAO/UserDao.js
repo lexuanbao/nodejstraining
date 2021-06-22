@@ -22,8 +22,8 @@ async function findAllUser(client) {
 }
 
 async function updateUser(client, user) {
-    var a = JSON.stringify(user);
-    const result = await client.db('UserList').collection('user_list').updateOne( {userId: user.userId}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}});
+    userId = parseInt(user.userId);
+    const result = await client.db('UserList').collection('user_list').updateOne( {userId: userId}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}});
     // const result = await client.db('UserList').collection('user_list').updateOne({userId: user.userId}, {$set: JSON.stringify(user)});
     // const result = await client.db('UserList').collection('user_list').updateOne( {userId: 4}, {$set: {userId: 5}} );
     if (result.upsertedCount > 0) {
@@ -32,6 +32,7 @@ async function updateUser(client, user) {
         console.log(`${result.matchedCount} document(s) matched the query criteria.`);
         console.log(`${result.modifiedCount} document(s) was/were updated.`);
     }
+    return result.modifiedCount;
 }
 
 async function addNewUser(client, user) {
@@ -60,7 +61,7 @@ var findAll = async function(res) {
         await client.connect();
         var result = await findAllUser(client);
         //Phải viết hàm send ở đây vì đang dùng async function
-        await res.send(result);
+        await res.send(result);//Gửi 1 array nên phải dùng .send()
         
     } catch (error) {
         console.log(error);
@@ -76,13 +77,12 @@ var updateById = async function(req, res) {
 
     try {
         //Lấy user từ client
-        req.body.fullNane = req.body.fullNane + "1";
         let user = req.body;
 
         await client.connect();
         var result = await updateUser(client, user);
         //Phải viết hàm send ở đây vì đang dùng async function
-        await res.send(result);
+        await res.json(result);
         
     } catch (error) {
         console.log(error);

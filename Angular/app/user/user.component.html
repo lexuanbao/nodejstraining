@@ -14,13 +14,14 @@
         <div id='birthDay{{user.userId}}'>
             {{user.birthDay}}
         </div>
+        <child-user-edit [user]='user' (userChange)="setUserEdit($event)"></child-user-edit>
         <button id='btnEdit{{user.userId}}' (click)='EditButtonOnclick(user)'>Edit</button>
         <button id='btnDelete' (click)='DeleteButtonOnclick(user.userId)'>Delete</button>
-        <button id='btnCance{{user.userId}}' hidden='true' (click)='CancelButtonClick(user)'>Cancel</button>
         <br />
         ---------------------------------------
     </div>
 </div>
-<button id='btnInsert' (click)='AddButtonOnclick()'>Add</button>
+<div *ngIf='userEdited'>{{userEdited.fullNane}}</div>
+<button id='btnInsert' (click)='AddButtonOnclick()'>Add</button><br/>
 
     

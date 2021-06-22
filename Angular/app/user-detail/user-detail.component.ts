@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserDetailComponent implements OnInit {
 
+  id: number;
   user: User | undefined;
   message: any; 
   constructor(
@@ -28,8 +29,8 @@ export class UserDetailComponent implements OnInit {
   }
 
   getUserById(){
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.userService.getUserById(id).subscribe(user => this.user = user);
+    this.id = parseInt(this.route.snapshot.paramMap.get('id')!);
+    this.userService.getUserById(this.id).subscribe(user => this.user = user);
   }
 
   SaveButtonOnclick(_userId: string, _fullNane: string, _kanaName: string, _birthDay: string ){
@@ -39,6 +40,11 @@ export class UserDetailComponent implements OnInit {
       kanaName: _kanaName,
       birthDay: _birthDay
     }
-    this.userService.insertUser(this.user).subscribe(msg => this.message = msg + ' record(s) inserted');
+    //Nếu id truyền từ list user qua ko phải 1 số thì sẽ là insert
+    if(isNaN(this.id)){
+      this.userService.insertUser(this.user).subscribe(msg => this.message = msg + ' record(s) inserted');
+    } else {
+      this.userService.updateUser(this.user).subscribe(msg => this.message = msg + ' record(s) updated');
+    }
   }
 }

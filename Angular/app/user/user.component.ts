@@ -9,9 +9,10 @@ import { Router } from '@angular/router'
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-
+  userEdited: User;
   users: User[] = [];
   message: any;
+  
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
@@ -19,61 +20,17 @@ export class UserComponent implements OnInit {
   }
 
   EditButtonOnclick(user: User){
-    document.getElementById(`userId${user.userId}`).innerHTML = `<input value=${user.userId}>` ;
-    document.getElementById(`fullName${user.userId}`).innerHTML = `<input value=${user.fullNane}>`;
-    document.getElementById(`kanaName${user.userId}`).innerHTML = `<input value=${user.kanaName}>`;
-    document.getElementById(`birthDay${user.userId}`).innerHTML = `<input value=${user.birthDay}>`;
-    document.getElementById(`btnEdit${user.userId}`).outerHTML = `<button id='btnSave${user.userId}' (click)='SaveButtonOnclick(user)'>Save</button>`;
-    document.getElementById(`btnCance${user.userId}`).hidden = false;
+    user.showFlag = true;
+    // //field
+    // document.getElementById(`userId${user.userId}`).innerHTML = `<input value=${user.userId}>` ;
+    // document.getElementById(`fullName${user.userId}`).innerHTML = `<input value=${user.fullNane}>`;
+    // document.getElementById(`kanaName${user.userId}`).innerHTML = `<input value=${user.kanaName}>`;
+    // document.getElementById(`birthDay${user.userId}`).innerHTML = `<input value=${user.birthDay}>`;
+    // //button
+    // document.getElementById(`btnEdit${user.userId}`).hidden = true;
+    // document.getElementById(`btnSave${user.userId}`).hidden = false;
+    // document.getElementById(`btnCance${user.userId}`).hidden = false;
   }
-
-  CancelButtonClick(user: User){
-    document.getElementById(`userId${user.userId}`).innerHTML = 
-    `<a id='userId${user.userId}' routerLink="detail/${user.userId}">
-      ${user.userId}
-    </a>`;
-    
-    document.getElementById(`fullName${user.userId}`).innerHTML =
-    `<div id='fullName${user.userId}'>
-      ${user.fullNane}
-    </div>`;
-    document.getElementById(`kanaName${user.userId}`).innerHTML = 
-    `<div id='fullName${user.userId}'>
-      ${user.fullNane}
-    </div>`;
-    document.getElementById(`birthDay${user.userId}`).innerHTML = 
-    `<div id='birthDay${user.userId}'>
-      ${user.birthDay}
-    </div>`;
-    document.getElementById(`btnSave${user.userId}`).outerHTML = `<button id='btnEdit${user.userId}' (click)='EditButtonOnclick(user)'>Edit</button>`;
-    document.getElementById(`btnCance${user.userId}`).hidden = true;
-  }
-
-  SaveButtonClick(user: User){
-    document.getElementById(`userId${user.userId}`).innerHTML = 
-    `<a id='userId${user.userId}' routerLink="detail/${user.userId}">
-      ${user.userId}
-    </a>`;
-    
-    document.getElementById(`fullName${user.userId}`).innerHTML =
-    `<div id='fullName${user.userId}'>
-      ${user.fullNane}
-    </div>`;
-    document.getElementById(`kanaName${user.userId}`).innerHTML = 
-    `<div id='fullName${user.userId}'>
-      ${user.fullNane}
-    </div>`;
-    document.getElementById(`birthDay${user.userId}`).innerHTML = 
-    `<div id='birthDay${user.userId}'>
-      ${user.birthDay}
-    </div>`;
-    document.getElementById(`btnSave${user.userId}`).outerHTML = `<button id='btnEdit${user.userId}' (click)='EditButtonOnclick(user)'>Edit</button>`;
-    document.getElementById(`btnCance${user.userId}`).hidden = true;
-  }
-  
-  // EditButtonOnclick(user: User){
-  //   this.userService.updateUser(user).subscribe();
-  // }
 
   getUser() {
     this.userService.getUser().subscribe(users => this.users = users);
@@ -93,4 +50,7 @@ export class UserComponent implements OnInit {
     this.router.navigateByUrl(`users/detail`);
   }
 
+  setUserEdit(_user){
+     this.userEdited = _user;
+  }
 }
