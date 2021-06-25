@@ -1,0 +1,16 @@
+<a id='userId{{user.userId}}' routerLink="detail/{{user.userId}}">
+    {{user.userId}}
+</a>
+<div id='fullName{{user.userId}}'>
+    {{user.fullNane}}
+</div>
+<div id='kanaName{{user.userId}}'>
+    {{user.kanaName}}
+</div>
+<div id='birthDay{{user.userId}}'>
+    {{user.birthDay}}
+</div>
+<button id='btnEdit{{user.userId}}' (click)='EditButtonOnclick(user)'>Edit</button>
+<button id='btnDelete' (click)='DeleteButtonOnclick(user.userId)'>Delete</button>
+<br />
+---------------------------------------

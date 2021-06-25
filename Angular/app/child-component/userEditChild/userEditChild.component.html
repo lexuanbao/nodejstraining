@@ -1,4 +1,4 @@
-<div  *ngIf='user.showFlag'>
+<div  *ngIf='user.editFlag'>
     <div><input id='userId' type='text' #userId value="{{user.userId}}"></div>
     <div><input id='userFullName' type='text' #fullNane value="{{user.fullNane}}"></div>
     <div><input id='kanaName' type='text' #kanaName value="{{user.kanaName}}"></div>
@@ -6,3 +6,4 @@
     <button (click)='Cancel()'>Cancel</button>
     <button (click)='SaveButtonOnclick(userId.value, fullNane.value, kanaName.value, birthDay.value)'>Save</button>
 </div>
+---------------------------------------

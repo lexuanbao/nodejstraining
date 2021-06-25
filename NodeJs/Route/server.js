@@ -21,12 +21,9 @@ app.use((req, res, next) => {
     next(); // Important
 })
 
-// app.get("/people", async (request, response) => {});
-// app.get("/person/:id", async (request, response) => {});
-
 app.get('/users', function (req, res) {
-
-    userController.findAll(res);
+    // userController.findAll(res);
+    userController.test(res);
 });
 
 app.post('/users', function (req, res){

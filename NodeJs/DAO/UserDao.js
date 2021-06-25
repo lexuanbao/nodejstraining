@@ -24,8 +24,6 @@ async function findAllUser(client) {
 async function updateUser(client, user) {
     userId = parseInt(user.userId);
     const result = await client.db('UserList').collection('user_list').updateOne( {userId: userId}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}});
-    // const result = await client.db('UserList').collection('user_list').updateOne({userId: user.userId}, {$set: JSON.stringify(user)});
-    // const result = await client.db('UserList').collection('user_list').updateOne( {userId: 4}, {$set: {userId: 5}} );
     if (result.upsertedCount > 0) {
         console.log(`One document was inserted with the id ${result.upsertedId.userId}`);
     } else {
@@ -138,4 +136,4 @@ var findById = async function (req, res) {
     }
 }
 
-module.exports = {findAll, updateById, insertUser, deleteUser, findById};
+module.exports = {findAll, updateById, insertUser, deleteUser, findById, test};

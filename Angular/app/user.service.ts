@@ -16,11 +16,11 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUser(): Observable<User[]>{
+  getUsers(): Observable<User[]>{
     return this.http.get<User[]>(this.userURL + '/users');
   }
 
-  updateUser(user: User){
+  updateUser(user: User): Observable<any>{
     return this.http.put(this.userURL + '/users', user);
   }
 
@@ -32,7 +32,7 @@ export class UserService {
     return this.http.post(this.userURL + '/users', user);
   }
 
-  getUserById(id: number){
+  getUserById(id: number): Observable<User>{
     return this.http.get<User>(this.userURL + `/users/${id}`);
   }
 }

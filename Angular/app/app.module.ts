@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { UserComponent } from './user/user.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditChildComponent } from './child-component/userEditChild/userEditChild.component';
+import { userViewChildComponent } from './child-component/userViewChild/userViewChild.Component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserComponent,
     UserDetailComponent,
-    UserEditChildComponent
+    UserEditChildComponent,
+    userViewChildComponent
   ],
   imports: [
     BrowserModule,
