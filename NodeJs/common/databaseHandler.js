@@ -1,19 +1,33 @@
+const uri = 'mongodb://localhost:27017';
 const MongoClient = require('mongodb').MongoClient;
 
-var test = async function test1 (res){databaseHandler(findAllUser, res)};
+/**
+*A class handles database connection 
+*/
+module.exports = function databaseHandler(){
+this.client = new MongoClient(uri, {useUnifiedTopology: true})
 
-async function databaseHandler(callBack, req, res){
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
-    try {
-        await client.connect();
-        var result = await callBack(client);
-        await res.send(result);
-        
-    } catch (error) {
-        console.log(error);
-
-    } finally {
-        await client.close();
+    /**
+    *Open database connection 
+    */
+    this.openConection = async function(){
+        try {   
+            await this.client.connect();
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
+    
+    /**
+    *Close database connection 
+    */
+    this.closeConnection = async function(){
+        try {
+            await this.client.close();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+} 
+
+

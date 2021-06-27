@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
 import { User } from 'src/app/user';
 import { UserService } from 'src/app/user.service';
 

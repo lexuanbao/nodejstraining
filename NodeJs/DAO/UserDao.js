@@ -1,36 +1,63 @@
 const MongoClient = require('mongodb').MongoClient;
-
 const uri = 'mongodb://localhost:27017';
+var databaseHandler = require('../common/databaseHandler');
+var dbHandler = new databaseHandler();
 
-//Tìm tất cả user
-async function findAllUser(client) {
-    const cursor = await client.db('UserList').collection('user_list').find();
-    const results = await cursor.toArray();
-
-    //In với mục đích là kiểm tra kết quả
-    if(results.length > 0) {
-        console.log('findAllUser(client) was executed successfully');
-        results.forEach((result, i) => {
-            console.log(`user ${i}: `);
-            console.log(JSON.stringify(result));
-        });
-        //Trả về kết quả
-        return results;
-    } else {
-        console.log("can't find anything");
+/**
+ *Finding all of users in database
+*/
+async function findAllUser(req, res){
+    try {
+        await dbHandler.openConection();
+        const cursor = await dbHandler.client.db('UserList').collection('user_list').find();
+        const results = await cursor.toArray();
+        
+        //In với mục đích là kiểm tra kết quả
+        if(results.length > 0) {
+            console.log('findAllUser(client) was executed successfully');
+            results.forEach((result, i) => {
+                console.log(`user ${i}: `);
+                console.log(JSON.stringify(result));
+            });
+        
+        } else {
+            results = JSON.stringify(results.length);
+            console.log("can't find anything");
+        }
+        //Gửi kết quả sang results
+        res.send(results);
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await dbHandler.closeConnection();
     }
 }
 
-async function updateUser(client, user) {
-    userId = parseInt(user.userId);
-    const result = await client.db('UserList').collection('user_list').updateOne( {userId: userId}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}});
-    if (result.upsertedCount > 0) {
-        console.log(`One document was inserted with the id ${result.upsertedId.userId}`);
-    } else {
-        console.log(`${result.matchedCount} document(s) matched the query criteria.`);
-        console.log(`${result.modifiedCount} document(s) was/were updated.`);
+/**
+ *Update a user in database and return modifiedCount
+*/
+async function updateUser(req, res) {
+    try {
+        await dbHandler.openConection();
+        //Lấy user từ request
+        user = req.body;
+        //Câu lệnh update
+        const result = await dbHandler.client.db('UserList').collection('user_list').updateOne(
+            {userId: parseInt(user.userId)}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}} );
+
+        if (result.upsertedCount > 0) {
+            console.log(`One document was inserted with the id ${result.upsertedId.userId}`);
+        } else {
+            console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+            console.log(`${result.modifiedCount} document(s) was/were updated.`);
+        }
+        //Trả res về client
+        res.json(result.modifiedCount);
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await dbHandler.closeConnection();
     }
-    return result.modifiedCount;
 }
 
 async function addNewUser(client, user) {
@@ -80,7 +107,7 @@ var updateById = async function(req, res) {
         await client.connect();
         var result = await updateUser(client, user);
         //Phải viết hàm send ở đây vì đang dùng async function
-        await res.json(result);
+        await res.send(JSON.stringify(result));
         
     } catch (error) {
         console.log(error);
@@ -136,4 +163,4 @@ var findById = async function (req, res) {
     }
 }
 
-module.exports = {findAll, updateById, insertUser, deleteUser, findById, test};
+module.exports = {findAllUser, updateUser, insertUser, deleteUser, findById};

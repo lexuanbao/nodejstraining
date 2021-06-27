@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { User } from "src/app/user";
 import { UserService } from "src/app/user.service";
 
@@ -12,17 +12,13 @@ export class userViewChildComponent implements OnInit{
 
 
     @Input() user: User;
+    @Output() deletedUserId = new EventEmitter<number>();
 
     message: string
     users: User[];
     constructor(private userService: UserService){}
 
     ngOnInit(){
-        this.getUsers();
-    }
-
-    getUsers(){
-        this.userService.getUsers().subscribe(users => this.users = users);
     }
 
     EditButtonOnclick(user: User){
@@ -30,12 +26,7 @@ export class userViewChildComponent implements OnInit{
     }
 
     DeleteButtonOnclick(id: number){
-        // this.users.forEach((item, index) => {
-        //   if(item.userId ==  id){
-        //     this.users.splice(index, 1); //remove khỏi mảng vị trí index đến index + 1 ( trùng id vẫn đúng)
-        //   }
-        // })
-        this.users = this.users.filter(user => user.userId != id);//Sai trong trường hợp trùng id
+        this.deletedUserId.emit(id);
         this.userService.deleteUser(id).subscribe(msg => this.message = msg + ' record(s) deleted');
       }
 }

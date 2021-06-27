@@ -31,4 +31,13 @@ export class UserComponent implements OnInit {
   getUser() {
     this.userService.getUsers().subscribe(users => this.users = users)
   }
+
+  deleteUserFromArray(id: number){
+  // this.users.forEach((item, index) => {
+      //   if(item.userId ==  id){
+      //     this.users.splice(index, 1); //remove khỏi mảng vị trí index đến index + 1 ( trùng id vẫn đúng)
+      //   }
+      // })
+    this.users = this.users.filter(user => user.userId != id); //Sai trong trường hợp trùng id
+  }
 }

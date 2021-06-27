@@ -8,7 +8,7 @@
     </div>
     <!--Component childUserEdit sẽ hiển thị khi editFlag = false hoặc undefine-->
     <ng-template #elseBlock>
-        <child-user-view [user]='user'></child-user-view>
+        <child-user-view [user]='user' (deletedUserId)="deleteUserFromArray($event)"></child-user-view>
     </ng-template>
 </div>
 <button id='btnInsert' (click)='AddButtonOnclick()'>Add</button><br/>

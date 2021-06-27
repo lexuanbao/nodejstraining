@@ -15,7 +15,7 @@ import { userViewChildComponent } from './child-component/userViewChild/userView
     UserComponent,
     UserDetailComponent,
     UserEditChildComponent,
-    userViewChildComponent
+    userViewChildComponent,
   ],
   imports: [
     BrowserModule,

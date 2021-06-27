@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-// const bodyParser = require('body-parser')
-
 const userController = require('../Controller/UserListController');
+const handler = require('../common/databaseHandler')
+
 
 app.set("view engine","vash")
 
@@ -22,8 +22,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/users', function (req, res) {
-    // userController.findAll(res);
-    userController.test(res);
+    userController.findAllUser(req, res);
 });
 
 app.post('/users', function (req, res){
@@ -31,7 +30,7 @@ app.post('/users', function (req, res){
 });
 
 app.put('/users', function (req, res) {
-    userController.updateById(req, res);
+    userController.updateUser(req, res);
 });
 
 app.delete('/users/:id', function (req, res) {
