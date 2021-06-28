@@ -9,7 +9,7 @@ var dbHandler = new databaseHandler();
 async function findAllUser(req, res){
     try {
         await dbHandler.openConection();
-        const cursor = await dbHandler.client.db('UserList').collection('user_list').find();
+        const cursor = await dbHandler.client.db().collection('user_list').find();
         const results = await cursor.toArray();
         
         //In với mục đích là kiểm tra kết quả
@@ -42,7 +42,7 @@ async function updateUser(req, res) {
         //Lấy user từ request
         user = req.body;
         //Câu lệnh update
-        const result = await dbHandler.client.db('UserList').collection('user_list').updateOne(
+        const result = await dbHandler.client.db().collection('user_list').updateOne(
             {userId: parseInt(user.userId)}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}} );
 
         if (result.upsertedCount > 0) {
@@ -60,107 +60,68 @@ async function updateUser(req, res) {
     }
 }
 
-async function addNewUser(client, user) {
-    const result = await client.db('UserList').collection('user_list').insertOne({userId: user.userId, fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
-    console.log(`New listing created with the following id: ${result.insertedId}`);
-    return result.insertedCount;
-}
-
-async function deleteUserById(client, id) {
-    const result = await client.db('UserList').collection('user_list').deleteOne({userId: id});
-    console.log(`${result.deletedCount} document was deleted`);
-    return result.deletedCount;
-}
-
-async function findUserById(client, id) {
-    const result = await client.db('UserList').collection('user_list').findOne({userId: id});
-    console.log(`${JSON.stringify(result)}`);
-    return result;
-}
-
-var findAll = async function(res) {
-
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
+/**
+ * Add a new user | Return insertedCount
+ * @param {req} req 
+ * @param {res} res 
+ */
+async function addNewUser(req, res) {
     try {
-        await client.connect();
-        var result = await findAllUser(client);
-        //Phải viết hàm send ở đây vì đang dùng async function
-        await res.send(result);//Gửi 1 array nên phải dùng .send()
-        
+        await dbHandler.openConection();
+        //Lấy user từ request
+        user = req.body
+        //Câu lệnh insert
+        const result = await dbHandler.client.db().collection('user_list').insertOne({userId: user.userId, fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
+        console.log(`New listing created with the following id: ${result.insertedId}`);
+        res.json(result.insertedCount);
     } catch (error) {
         console.log(error);
-
     } finally {
-        await client.close();
+        await dbHandler.closeConnection();
     }
 }
 
-var updateById = async function(req, res) {
-
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
+/**
+ * Delete a user | Return insertedCount
+ * @param {req} req 
+ * @param {res} res 
+ */
+async function deleteUserById(req, res) {
     try {
-        //Lấy user từ client
-        let user = req.body;
-
-        await client.connect();
-        var result = await updateUser(client, user);
-        //Phải viết hàm send ở đây vì đang dùng async function
-        await res.send(JSON.stringify(result));
-        
+        await dbHandler.openConection();
+        //Lấy userid từ request
+        id = parseInt(req.params.id);
+        //câu lệnh delete
+        const result = await dbHandler.client.db().collection('user_list').deleteOne({userId: id});
+        console.log(`${result.deletedCount} document was deleted`);
+        return result.deletedCount;
     } catch (error) {
         console.log(error);
-
     } finally {
-        await client.close();
+        await dbHandler.closeConnection();
     }
+    
 }
 
-var insertUser = async function (req, res){
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
+/**
+ * Delete a user | Return insertedCount
+ * @param {req} req 
+ * @param {res} res 
+ */
+async function findUserById(req, res) {
     try {
-        let user = req.body;
-        await client.connect();
-        let result = await addNewUser(client, user);
-        res.json(result);
-    } catch (error) {
-        console.log(error);
-
-    } finally {
-        await client.close()
-    }
-}
-
-var deleteUser = async function (req, res){
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
-    try{
-        let id = parseInt(req.params.id);
-        await client.connect();
-        const result = await deleteUserById(client, id);
-        res.json(result);
-    } catch(error) {
-        console.log(error);
-    } finally {
-        await client.close();
-    }
-}
-
-var findById = async function (req, res) {
-    const client = new MongoClient(uri, {useUnifiedTopology: true});
-
-    try {
-        await client.connect();
-        let id = parseInt(req.params.id);
-        const result = await findUserById(client, id);
+        await dbHandler.openConection();
+        //Lấy id từ request
+        id = parseInt(req.params.id);
+        //Câu lệnh tìm kiếm
+        const result = await dbHandler.client.db('UserList').collection('user_list').findOne({userId: id});
+        console.log(`${JSON.stringify(result)}`);
         res.json(result);
     } catch (error) {
         console.log(error);
     } finally {
-        await client.close();
+        await dbHandler.closeConnection();
     }
 }
 
-module.exports = {findAllUser, updateUser, insertUser, deleteUser, findById};
+module.exports = {findAllUser, updateUser, addNewUser, deleteUserById, findUserById};

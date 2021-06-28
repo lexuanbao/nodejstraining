@@ -26,7 +26,7 @@ app.get('/users', function (req, res) {
 });
 
 app.post('/users', function (req, res){
-    userController.insertUser(req, res);
+    userController.addNewUser(req, res);
 });
 
 app.put('/users', function (req, res) {
@@ -34,11 +34,11 @@ app.put('/users', function (req, res) {
 });
 
 app.delete('/users/:id', function (req, res) {
-    userController.deleteUser(req, res);
+    userController.deleteUserById(req, res);
 })
 
 app.get('/users/:id', function (req, res) {
-    userController.findById(req, res);
+    userController.findUserById(req, res);
 })
 
 var server = app.listen(5000, function () {

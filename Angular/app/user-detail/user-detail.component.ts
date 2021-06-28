@@ -30,7 +30,9 @@ export class UserDetailComponent implements OnInit {
 
   getUserById(){
     this.id = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.userService.getUserById(this.id).subscribe(user => this.user = user);
+    if(!isNaN(this.id)){
+      this.userService.getUserById(this.id).subscribe(user => this.user = user);
+    }
   }
 
   SaveButtonOnclick(_userId: string, _fullNane: string, _kanaName: string, _birthDay: string ){
