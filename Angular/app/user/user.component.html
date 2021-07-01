@@ -1,6 +1,4 @@
 <p>user works!</p>
-<p style="color: green;">{{message}}</p>
-
 <div *ngFor = 'let user of users'>
     <!--Component childUserEdit sẽ hiển thị khi editFlag = true-->
     <div *ngIf='user.editFlag==true; else elseBlock'>

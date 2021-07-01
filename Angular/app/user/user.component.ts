@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from '../user'
 import { Router } from '@angular/router'
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-user',
@@ -11,9 +12,12 @@ import { Router } from '@angular/router'
 export class UserComponent implements OnInit {
   userEdited: User;
   users: User[] = [];
-  message: any;
   
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private messageService: MessageService
+    ) { }
 
   ngOnInit(): void {
     this.getUser();
@@ -29,7 +33,10 @@ export class UserComponent implements OnInit {
   }
 
   getUser() {
-    this.userService.getUsers().subscribe(users => this.users = users)
+    this.userService.getUsers().subscribe(
+      users => this.users = users,
+      error => this.messageService.addError(error)
+    )
   }
 
   deleteUserFromArray(id: number){

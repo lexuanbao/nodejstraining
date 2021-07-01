@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { MessageService } from "src/app/message.service";
 import { User } from "src/app/user";
 import { UserService } from "src/app/user.service";
 
@@ -10,13 +11,14 @@ import { UserService } from "src/app/user.service";
 
 export class userViewChildComponent implements OnInit{
 
-
     @Input() user: User;
     @Output() deletedUserId = new EventEmitter<number>();
 
-    message: string
     users: User[];
-    constructor(private userService: UserService){}
+    constructor(
+        private userService: UserService,
+        private messageService: MessageService
+        ){}
 
     ngOnInit(){
     }
@@ -27,6 +29,9 @@ export class userViewChildComponent implements OnInit{
 
     DeleteButtonOnclick(id: number){
         this.deletedUserId.emit(id);
-        this.userService.deleteUser(id).subscribe(msg => this.message = msg + ' record(s) deleted');
-      }
+        this.userService.deleteUser(id).subscribe(
+            msg => this.messageService.addMsg(msg),
+            error => this.messageService.addError(error)
+        );
+    }
 }

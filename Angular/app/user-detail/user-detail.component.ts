@@ -13,6 +13,7 @@ import { MessageService } from '../message.service';
 export class UserDetailComponent implements OnInit {
   id: number;
   user: User | undefined;
+  
   constructor(
     private location: Location,
     private userService: UserService,
@@ -45,12 +46,12 @@ export class UserDetailComponent implements OnInit {
     //Nếu id truyền từ list user qua ko phải 1 số thì sẽ là insert
     if(isNaN(this.id)){
       this.userService.insertUser(this.user).subscribe(
-        msg => this.message.addMsg(msg + ' record(s) inserted'),
+        msg => this.message.addMsg(msg),
         e => this.message.addError(e.error)
       );
     } else {
       this.userService.updateUser(this.user).subscribe(
-        msg => this.message.addMsg(msg + ' record(s) updated'),
+        msg => this.message.addMsg(msg),
         e => this.message.addError(e.error)
       );
     }
