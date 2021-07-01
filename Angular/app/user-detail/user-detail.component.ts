@@ -3,6 +3,7 @@ import { Location} from '@angular/common';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -10,14 +11,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-
   id: number;
   user: User | undefined;
-  message: any; 
   constructor(
     private location: Location,
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private message: MessageService
     ){}
 
   ngOnInit(): void {
@@ -44,9 +44,15 @@ export class UserDetailComponent implements OnInit {
     }
     //Nếu id truyền từ list user qua ko phải 1 số thì sẽ là insert
     if(isNaN(this.id)){
-      this.userService.insertUser(this.user).subscribe(msg => this.message = msg + ' record(s) inserted');
+      this.userService.insertUser(this.user).subscribe(
+        msg => this.message.addMsg(msg + ' record(s) inserted'),
+        e => this.message.addError(e.error)
+      );
     } else {
-      this.userService.updateUser(this.user).subscribe(msg => this.message = msg + ' record(s) updated');
+      this.userService.updateUser(this.user).subscribe(
+        msg => this.message.addMsg(msg + ' record(s) updated'),
+        e => this.message.addError(e.error)
+      );
     }
   }
 }

@@ -2,9 +2,10 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = 'mongodb://localhost:27017';
 var databaseHandler = require('../common/databaseHandler');
 var dbHandler = new databaseHandler();
+const { validationResult } = require('express-validator');
 
 /**
- *Finding all of users in database
+ *Finding all of users in database | send a response of user array
 */
 async function findAllUser(req, res){
     try {
@@ -38,6 +39,13 @@ async function findAllUser(req, res){
 */
 async function updateUser(req, res) {
     try {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json(errors.array());
+            return;
+        }
+
         await dbHandler.openConection();
         //Lấy user từ request
         user = req.body;
@@ -94,7 +102,7 @@ async function deleteUserById(req, res) {
         //câu lệnh delete
         const result = await dbHandler.client.db().collection('user_list').deleteOne({userId: id});
         console.log(`${result.deletedCount} document was deleted`);
-        return result.deletedCount;
+        res.json(result.deletedCount);
     } catch (error) {
         console.log(error);
     } finally {
@@ -104,7 +112,7 @@ async function deleteUserById(req, res) {
 }
 
 /**
- * Delete a user | Return insertedCount
+ * Find a user by id | Return finded user
  * @param {req} req 
  * @param {res} res 
  */

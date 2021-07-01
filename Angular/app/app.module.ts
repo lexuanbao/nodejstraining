@@ -8,6 +8,7 @@ import { UserComponent } from './user/user.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditChildComponent } from './child-component/userEditChild/userEditChild.component';
 import { userViewChildComponent } from './child-component/userViewChild/userViewChild.Component';
+import { MessageComponent } from './messages/message.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { userViewChildComponent } from './child-component/userViewChild/userView
     UserDetailComponent,
     UserEditChildComponent,
     userViewChildComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

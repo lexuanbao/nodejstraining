@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
 const userController = require('../Controller/UserListController');
-const handler = require('../common/databaseHandler')
-
+const validator = require('../common/validator')
 
 app.set("view engine","vash")
 
@@ -29,7 +28,7 @@ app.post('/users', function (req, res){
     userController.addNewUser(req, res);
 });
 
-app.put('/users', function (req, res) {
+app.put('/users', validator.validate(),function (req, res) {
     userController.updateUser(req, res);
 });
 

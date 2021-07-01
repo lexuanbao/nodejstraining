@@ -1,0 +1,4 @@
+<div *ngIf="messageService.messages.length || messageService.errors.length">
+    <div style="color: green;" *ngFor="let message of messageService.messages"> {{message}} </div>
+    <div style="color: red;" *ngFor="let error of messageService.errors"> {{error}} </div>
+</div>
