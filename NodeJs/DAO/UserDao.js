@@ -2,12 +2,12 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = 'mongodb://localhost:27017';
 var databaseHandler = require('../common/databaseHandler');
 var dbHandler = new databaseHandler();
-const { validationResult } = require('express-validator');
 
 /**
- *Finding all of users in database | send a response of user array
+ *Finding all of users in database | return array of all users
+ * @param {req} req 
 */
-async function findAllUser(req, res){
+async function findAllUser(req){
     try {
         await dbHandler.openConection();
         const cursor = await dbHandler.client.db().collection('user_list').find();
@@ -22,11 +22,10 @@ async function findAllUser(req, res){
             });
         
         } else {
-            results = JSON.stringify(results.length);
             console.log("can't find anything");
         }
-        //Gửi kết quả sang results
-        res.send(results);
+        //Trả về mảng tất cả user
+        return results;
     } catch (error) {
         console.log(error);
     } finally {
@@ -35,17 +34,11 @@ async function findAllUser(req, res){
 }
 
 /**
- *Update a user in database send a message to client
+ *Update a user in database | return modifiedCount
+ * @param {req} req 
 */
-async function updateUser(req, res) {
+async function updateUser(req) {
     try {
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            res.status(400).json(errors.array());
-            return;
-        }
-
         await dbHandler.openConection();
         //Lấy user từ request
         user = req.body;
@@ -59,8 +52,8 @@ async function updateUser(req, res) {
             console.log(`${result.matchedCount} document(s) matched the query criteria.`);
             console.log(`${result.modifiedCount} document(s) was/were updated.`);
         }
-        //Trả res về client
-        res.json(result.modifiedCount  + ' record(s) updated');
+        //Trả modifiedCount
+        return result.modifiedCount;
     } catch (error) {
         console.log(error);
     } finally {
@@ -69,19 +62,18 @@ async function updateUser(req, res) {
 }
 
 /**
- * Add a new user send a message to client
+ * Add a new user | return insertedCount
  * @param {req} req 
- * @param {res} res 
  */
-async function addNewUser(req, res) {
+async function addNewUser(req) {
     try {
         await dbHandler.openConection();
         //Lấy user từ request
         user = req.body
         //Câu lệnh insert
-        const result = await dbHandler.client.db().collection('user_list').insertOne({userId: user.userId, fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
+        const result = await dbHandler.client.db().collection('user_list').insertOne({userId: parseInt(user.userId), fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
         console.log(`New listing created with the following id: ${result.insertedId}`);
-        res.json(result.insertedCount + ' record(s) inserted');
+        return result.insertedCount;
     } catch (error) {
         console.log(error);
     } finally {
@@ -92,9 +84,8 @@ async function addNewUser(req, res) {
 /**
  * Delete a user | Return insertedCount
  * @param {req} req 
- * @param {res} res 
  */
-async function deleteUserById(req, res) {
+async function deleteUserById(req) {
     try {
         await dbHandler.openConection();
         //Lấy userid từ request
@@ -102,7 +93,7 @@ async function deleteUserById(req, res) {
         //câu lệnh delete
         const result = await dbHandler.client.db().collection('user_list').deleteOne({userId: id});
         console.log(`${result.deletedCount} document was deleted`);
-        res.json(result.deletedCount  + ' record(s) deleted');
+        return result.deletedCount;
     } catch (error) {
         console.log(error);
     } finally {
@@ -112,24 +103,22 @@ async function deleteUserById(req, res) {
 }
 
 /**
- * Find a user by id | Return finded user
- * @param {req} req 
- * @param {res} res 
+ * Find a user by id | Return found user
+ * @param {id} id of user 
  */
-async function findUserById(req, res) {
+async function findUserById(id) {
     try {
         await dbHandler.openConection();
-        //Lấy id từ request
-        id = parseInt(req.params.id);
         //Câu lệnh tìm kiếm
         const result = await dbHandler.client.db('UserList').collection('user_list').findOne({userId: id});
         console.log(`${JSON.stringify(result)}`);
-        res.json(result);
+        return result;
     } catch (error) {
         console.log(error);
     } finally {
         await dbHandler.closeConnection();
     }
 }
+
 
 module.exports = {findAllUser, updateUser, addNewUser, deleteUserById, findUserById};

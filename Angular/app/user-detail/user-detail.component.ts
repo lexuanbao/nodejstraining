@@ -47,12 +47,12 @@ export class UserDetailComponent implements OnInit {
     if(isNaN(this.id)){
       this.userService.insertUser(this.user).subscribe(
         msg => this.message.addMsg(msg),
-        e => this.message.addError(e.error)
+        e => this.message.addError(e)
       );
     } else {
       this.userService.updateUser(this.user).subscribe(
         msg => this.message.addMsg(msg),
-        e => this.message.addError(e.error)
+        e => this.message.addError(e)
       );
     }
   }

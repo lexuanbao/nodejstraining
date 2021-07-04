@@ -12,8 +12,8 @@ export class MessageService{
         this.messages.push(msg);
     }
 
-    addError(error){
-        error.forEach(element => {
+    addError(e){
+        e.error.forEach(element => {
             this.errors.push(element.msg);
         });
     }

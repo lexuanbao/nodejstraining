@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const userController = require('../Controller/UserListController');
 const validator = require('../common/validator')
+const { validationResult } = require('express-validator');
 
 app.set("view engine","vash")
 
@@ -20,24 +21,39 @@ app.use((req, res, next) => {
     next(); // Important
 })
 
-app.get('/users', function (req, res) {
-    userController.findAllUser(req, res);
+app.get('/users', async function (req, res) {
+    result = await userController.findAllUser(req);
+    res.send(result);
 });
 
-app.post('/users', function (req, res){
-    userController.addNewUser(req, res);
+app.post('/users', validator.validateUser(), async function (req, res){
+    const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).json(errors.array());
+            return;
+        }
+
+    result = await userController.addNewUser(req);
+    res.json(result + ' record(s) inserted');
 });
 
-app.put('/users', validator.validate(),function (req, res) {
-    userController.updateUser(req, res);
+app.put('/users', async function (req, res) {
+    result = await userController.updateUser(req);
+    res.json(result  + ' record(s) updated');
 });
 
-app.delete('/users/:id', function (req, res) {
-    userController.deleteUserById(req, res);
+app.delete('/users/:id', async function (req, res) {
+    result = await userController.deleteUserById(req);
+    res.json(result  + ' record(s) deleted');
 })
 
-app.get('/users/:id', function (req, res) {
-    userController.findUserById(req, res);
+app.get('/users/:id', async function (req, res) {
+    //Lấy id từ request
+    id = parseInt(req.params.id);
+
+    result = await userController.findUserById(id);
+
+    res.json(result);
 })
 
 var server = app.listen(5000, function () {

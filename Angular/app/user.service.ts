@@ -22,17 +22,15 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<any>{
-    return this.http.put(this.userURL + '/users', user)
+    return this.http.put(this.userURL + '/users', user);
   }
 
   deleteUser(id: number): Observable<any>{
     return this.http.delete(this.userURL + `/users/${id}`)
   }
 
-  insertUser(user: User){
-    return this.http.post(this.userURL + '/users', user).pipe(
-      tap(),
-      catchError(this.handleError<any>('insert')));
+  insertUser(user: User): Observable<any>{
+    return this.http.post(this.userURL + '/users', user);
   }
 
   getUserById(id: number): Observable<User>{
@@ -53,7 +51,7 @@ export class UserService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      console.log(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       // this.log(`${operation} failed: ${error.message}`);
