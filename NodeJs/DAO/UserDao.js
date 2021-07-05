@@ -110,7 +110,20 @@ async function findUserById(id) {
     try {
         await dbHandler.openConection();
         //Câu lệnh tìm kiếm
-        const result = await dbHandler.client.db('UserList').collection('user_list').findOne({userId: id});
+        const result = await dbHandler.client.db().collection('user_list').findOne({userId: id});
+        console.log(`${JSON.stringify(result)}`);
+        return result;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await dbHandler.closeConnection();
+    }
+}
+
+async function findAdminByUserName(_userName){
+    try {
+        await dbHandler.openConection();
+        const result = await dbHandler.client.db().collection('user_list').findOne({userName: _userName, Role: 1})
         console.log(`${JSON.stringify(result)}`);
         return result;
     } catch (error) {
@@ -121,4 +134,4 @@ async function findUserById(id) {
 }
 
 
-module.exports = {findAllUser, updateUser, addNewUser, deleteUserById, findUserById};
+module.exports = {findAllUser, updateUser, addNewUser, deleteUserById, findUserById, findAdminByUserName};

@@ -9,6 +9,7 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditChildComponent } from './child-component/userEditChild/userEditChild.component';
 import { userViewChildComponent } from './child-component/userViewChild/userViewChild.Component';
 import { MessageComponent } from './messages/message.component';
+import { LoginComponent} from './login/login.component'
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MessageComponent } from './messages/message.component';
     UserDetailComponent,
     UserEditChildComponent,
     userViewChildComponent,
-    MessageComponent
+    MessageComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

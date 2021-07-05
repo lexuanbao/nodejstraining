@@ -1,12 +1,13 @@
-<div>
-    <app-messages></app-messages>
-</div>
-<div>
-    <div style="margin: auto; width: 500px;">
-        {{title}}
-        <div>
-            <router-outlet></router-outlet>
+<div style="position: relative;">
+    <div style="position: absolute;">
+        <app-messages></app-messages>
+    </div>
+    <div>
+        <div style="position: absolute; left: 650px;">
+            {{title}}
+            <div>
+                <router-outlet></router-outlet>
+            </div>
         </div>
     </div>
 </div>
-

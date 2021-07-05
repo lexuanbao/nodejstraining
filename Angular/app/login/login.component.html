@@ -1,0 +1,17 @@
+<table>
+    <tr>
+        <td>UserName: </td>
+        <td><input id="userName" #userName placeholder="Username"></td>
+    </tr>
+    <tr>
+        <td>Password: </td>
+        <td><input id="password" #password placeholder="Password" type="password"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button (click)='LoginButtonOnclick(userName.value, password.value)'>Login</button>
+            <button>Register</button>
+        </td>
+    </tr>
+</table>
