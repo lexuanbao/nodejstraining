@@ -26,7 +26,9 @@ app.get('/users', async function (req, res) {
     res.send(result);
 });
 
-app.post('/users', validator.validateUser(), async function (req, res){
+app.post('/users', validator.validateAddUser(), async function (req, res){
+
+    //Xử lí khi có lỗi validate (gửi statú 400 bad request)
     const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(400).json(errors.array());
@@ -37,7 +39,15 @@ app.post('/users', validator.validateUser(), async function (req, res){
     res.json(result + ' record(s) inserted');
 });
 
-app.put('/users', async function (req, res) {
+app.put('/users', validator.validateEditUser(), async function (req, res) {
+
+    //Xử lí khi có lỗi validate (gửi statú 400 bad request)
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        res.status(400).json(errors.array());
+        return;
+    }
+
     result = await userController.updateUser(req);
     res.json(result  + ' record(s) updated');
 });

@@ -2,7 +2,7 @@
 <table>
     <tr>
         <td>userId:</td>
-        <td><input id='userId' type='text' #userId value="{{user.userId}}"></td>
+        <td><input id='userId' type='text' #userId value="{{user.userId}}" [attr.disabled]="userEditFlag ? true: null"></td>
     </tr>
     <tr>
         <td>fullNane:</td>
@@ -17,7 +17,6 @@
         <td><input id='birthDay' type='text' #birthDay value="{{user.birthDay}}"></td>
     </tr>
     <tr>
-        <td></td>
         <td>
             <button (click)='SaveButtonOnclick(userId.value, fullNane.value, kanaName.value, birthDay.value)'>Save</button>
             <button (click)='goBack()'>Back</button>

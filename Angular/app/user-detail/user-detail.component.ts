@@ -13,6 +13,7 @@ import { MessageService } from '../message.service';
 export class UserDetailComponent implements OnInit {
   id: number;
   user: User | undefined;
+  userEditFlag: boolean;
   
   constructor(
     private location: Location,
@@ -23,6 +24,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserById();
+    this.checkEditFlag();
   }
 
   goBack(){
@@ -36,15 +38,27 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
+  checkEditFlag(){
+    //Nếu id truyền qua là undefine hoặc null thì sẽ là mode add new, ngược lại sẽ là mode edit
+    if(isNaN(this.id)){
+      //Add new
+      this.userEditFlag = false;
+    } else {
+      //Edit
+      this.userEditFlag = true;
+    }
+  }
+
   SaveButtonOnclick(_userId: string, _fullNane: string, _kanaName: string, _birthDay: string ){
     this.user = {
-      userId: parseInt(_userId),
+      userId: isNaN(parseInt(_userId)) ? "" : parseInt(_userId),
       fullNane: _fullNane,
       kanaName: _kanaName,
       birthDay: _birthDay
     }
-    //Nếu id truyền từ list user qua ko phải 1 số thì sẽ là insert
-    if(isNaN(this.id)){
+    this.checkEditFlag();
+    //Nếu userEditFlag là false thì sẽ vào mode insert
+    if(!this.userEditFlag){
       this.userService.insertUser(this.user).subscribe(
         msg => this.message.addMsg(msg),
         e => this.message.addError(e)

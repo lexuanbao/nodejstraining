@@ -1,5 +1,5 @@
 export interface User {
-    userId: number;
+    userId: any;
     fullNane: string;
     kanaName: string;
     birthDay: string;
