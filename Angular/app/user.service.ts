@@ -37,7 +37,7 @@ export class UserService {
   }
 
   authenticateUser(userName: string, password: string): Observable<boolean>{
-    return this.http.post<boolean>(this.userURL + 'login', [userName, password]);
+    return this.http.post<boolean>(this.userURL + '/login', [userName, password]);
   }
 
   // handleError(error: HttpErrorResponse) {

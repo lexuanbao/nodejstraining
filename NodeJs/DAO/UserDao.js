@@ -7,7 +7,7 @@ var dbHandler = new databaseHandler();
  *Finding all of users in database | return array of all users
  * @param {req} req 
 */
-async function findAllUser(req){
+async function findAllUserDao(req){
     try {
         await dbHandler.openConection();
         const cursor = await dbHandler.client.db().collection('user_list').find();
@@ -37,7 +37,7 @@ async function findAllUser(req){
  *Update a user in database | return modifiedCount
  * @param {req} req 
 */
-async function updateUser(req) {
+async function updateUserDao(req) {
     try {
         await dbHandler.openConection();
         //Lấy user từ request
@@ -65,7 +65,7 @@ async function updateUser(req) {
  * Add a new user | return insertedCount
  * @param {req} req 
  */
-async function addNewUser(req) {
+async function addNewUserDao(req) {
     try {
         await dbHandler.openConection();
         //Lấy user từ request
@@ -85,7 +85,7 @@ async function addNewUser(req) {
  * Delete a user | Return insertedCount
  * @param {req} req 
  */
-async function deleteUserById(req) {
+async function deleteUserByIdDao(req) {
     try {
         await dbHandler.openConection();
         //Lấy userid từ request
@@ -106,7 +106,7 @@ async function deleteUserById(req) {
  * Find a user by id | Return found user
  * @param {id} id of user 
  */
-async function findUserById(id) {
+async function findUserByIdDao(id) {
     try {
         await dbHandler.openConection();
         //Câu lệnh tìm kiếm
@@ -120,7 +120,7 @@ async function findUserById(id) {
     }
 }
 
-async function findAdminByUserName(_userName){
+async function findAdminByUserNameDao(_userName){
     try {
         await dbHandler.openConection();
         const result = await dbHandler.client.db().collection('user_list').findOne({userName: _userName, Role: 1})
@@ -134,4 +134,4 @@ async function findAdminByUserName(_userName){
 }
 
 
-module.exports = {findAllUser, updateUser, addNewUser, deleteUserById, findUserById, findAdminByUserName};
+module.exports = {findAllUserDao, updateUserDao, addNewUserDao, deleteUserByIdDao, findUserByIdDao, findAdminByUserNameDao};

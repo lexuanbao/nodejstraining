@@ -23,7 +23,7 @@ exports.validateAddUser = () => {
         validator.check('userId', `userId must not be empty`).exists().bail().notEmpty().bail()
                  .isNumeric().withMessage(`userId must be a number`),
         validator.check('userId').exists().bail().trim().escape().custom(async value => {
-                user = await userDao.findUserById(parseInt(value));
+                user = await userDao.findUserByIdDao(parseInt(value));
                     if(user) {
                         throw new Error('userId already exists');
                     } else {

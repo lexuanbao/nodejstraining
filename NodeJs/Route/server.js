@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const userController = require('../Controller/UserListController');
+const userController = require('../Controller/UserController');
 const validator = require('../common/validator')
 const { validationResult } = require('express-validator');
 
@@ -63,6 +63,13 @@ app.get('/users/:id', async function (req, res) {
 
     result = await userController.findUserById(id);
 
+    res.json(result);
+})
+
+app.post('/login', async function(req, res){
+    const userName = req.body[0]; // Lấy username từ request
+    const password = req.body[1]; // Lấy password từ request
+    result = await userController.authenticateUser(userName, password);
     res.json(result);
 })
 
