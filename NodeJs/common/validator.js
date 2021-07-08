@@ -20,16 +20,14 @@ exports.validateAddUser = () => {
     trim() là santizer xử lí value truyền vào 
 */
     return [
-        validator.check('userId', `userId must not be empty`).exists().bail().notEmpty().bail()
-                 .isNumeric().withMessage(`userId must be a number`),
-        validator.check('userId').exists().bail().trim().escape().custom(async value => {
-                user = await userDao.findUserByIdDao(parseInt(value));
-                    if(user) {
-                        throw new Error('userId already exists');
-                    } else {
-                        return user
-                    }
-                })
+        validator.check('userId', 'userId must not be empty').trim().escape().exists().bail()
+                 .notEmpty().bail().isNumeric().withMessage('userId must be a number')
+                 .custom(async value => {
+                    user = await userDao.findUserByIdDao(parseInt(value));
+                        if(user) {
+                            throw new Error('userId already exists');
+                        }
+                    })
         // validator.body('phone').optional().isInt(),
         // validator.body('status').optional().ivclsIn(['enabled', 'disabled'])
     ].concat(validateUserCommon);   
@@ -37,4 +35,19 @@ exports.validateAddUser = () => {
 
 exports.validateEditUser = () => {
     return validateUserCommon;
+}
+
+exports.validateLoginUser = () => {
+    return [
+        validator.check('userName', 'userName must not be empty').exists().bail().trim().notEmpty().bail()
+                 .custom(async value => {
+                     user = await userDao.findAdminByUserNameDao(value);
+                     if(user){
+                         return user
+                     } else {
+                        throw new Error('incorrect userName');
+                     }
+                 }),
+        validator.check('password', 'password must not be empty').exists().bail().trim().notEmpty()
+    ]
 }

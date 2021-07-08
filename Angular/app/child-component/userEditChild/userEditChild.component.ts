@@ -36,7 +36,7 @@ export class UserEditChildComponent implements OnInit {
         this.user.editFlag = false;
         of<any>(this.userService.updateUser(user).subscribe(
             msg => this.messageService.addMsg(msg),
-            e => this.messageService.addError(e)
+            e => this.messageService.addErrorResponse(e)
         )).subscribe(() => this.userChange.emit(user));//Không thể dùng http để subcribe trực tiếp được
     }
 }

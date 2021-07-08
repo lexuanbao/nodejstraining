@@ -1,16 +1,16 @@
 <table>
     <tr>
         <td>UserName: </td>
-        <td><input id="userName" #userName placeholder="Username"></td>
+        <td><input id="userName"  placeholder="Username" [(ngModel)]="userName"></td>
     </tr>
     <tr>
         <td>Password: </td>
-        <td><input id="password" #password placeholder="Password" type="password"></td>
+        <td><input id="password"  placeholder="Password" [(ngModel)]="password" type="password"></td>
     </tr>
     <tr>
         <td></td>
         <td>
-            <button (click)='LoginButtonOnclick(userName.value, password.value)'>Login</button>
+            <button (click)='LoginButtonOnclick()'type='button'>Login</button>
             <button>Register</button>
         </td>
     </tr>

@@ -2,12 +2,13 @@
     <div style="position: absolute; width: 500px;">
         <app-messages></app-messages>
     </div>
-    <div>
-        <div style="position: absolute; left: 650px;">
-            {{title}}
-            <div>
-                <router-outlet></router-outlet>
-            </div>
+    <div style="position: absolute; left: 650px;">
+        {{title}}
+        <div>
+            <router-outlet></router-outlet>
         </div>
+    </div>
+    <div style="position: absolute; right: 100px;">
+        <app-logout></app-logout>
     </div>
 </div>

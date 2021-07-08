@@ -1,16 +1,17 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = 'mongodb://localhost:27017';
-var databaseHandler = require('../common/databaseHandler');
-var dbHandler = new databaseHandler();
+const constant = require('../common/Constant');
+const databaseHandler = require('../common/databaseHandler');
+const dbHandler = new databaseHandler();
 
 /**
  *Finding all of users in database | return array of all users
- * @param {req} req 
 */
-async function findAllUserDao(req){
+async function findAllUserDao(){
     try {
         await dbHandler.openConection();
-        const cursor = await dbHandler.client.db().collection('user_list').find();
+        //Tìm kiếm tất cả user không phải là admin
+        const cursor = await dbHandler.client.db().collection('user_list').find({role: constant.UserRole});
         const results = await cursor.toArray();
         
         //In với mục đích là kiểm tra kết quả
@@ -35,16 +36,15 @@ async function findAllUserDao(req){
 
 /**
  *Update a user in database | return modifiedCount
- * @param {req} req 
+ * @param {user} user 
 */
-async function updateUserDao(req) {
+async function updateUserDao(user) {
     try {
         await dbHandler.openConection();
-        //Lấy user từ request
-        user = req.body;
-        //Câu lệnh update
+        
+        //Update 1 user không phải admin
         const result = await dbHandler.client.db().collection('user_list').updateOne(
-            {userId: parseInt(user.userId)}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}} );
+            {userId: parseInt(user.userId), role: constant.UserRole}, {$set: {fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay}} );
 
         if (result.upsertedCount > 0) {
             console.log(`One document was inserted with the id ${result.upsertedId.userId}`);
@@ -63,15 +63,15 @@ async function updateUserDao(req) {
 
 /**
  * Add a new user | return insertedCount
- * @param {req} req 
+ * @param {user} user 
  */
-async function addNewUserDao(req) {
+async function addNewUserDao(user) {
     try {
         await dbHandler.openConection();
-        //Lấy user từ request
-        user = req.body
-        //Câu lệnh insert
-        const result = await dbHandler.client.db().collection('user_list').insertOne({userId: parseInt(user.userId), fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay});
+        
+        //Câu lệnh insert 1 user không phải admin
+        const result = await dbHandler.client.db().collection('user_list').insertOne({
+            userId: parseInt(user.userId), fullNane: user.fullNane, kanaName: user.kanaName, birthDay: user.birthDay, role: constant.UserRole});
         console.log(`New listing created with the following id: ${result.insertedId}`);
         return result.insertedCount;
     } catch (error) {
@@ -83,15 +83,14 @@ async function addNewUserDao(req) {
 
 /**
  * Delete a user | Return insertedCount
- * @param {req} req 
+ * @param {id} id 
  */
-async function deleteUserByIdDao(req) {
+async function deleteUserByIdDao(id) {
     try {
         await dbHandler.openConection();
-        //Lấy userid từ request
-        id = parseInt(req.params.id);
-        //câu lệnh delete
-        const result = await dbHandler.client.db().collection('user_list').deleteOne({userId: id});
+        
+        //câu lệnh delete user không phải admin
+        const result = await dbHandler.client.db().collection('user_list').deleteOne({userId: id, role: constant.UserRole});
         console.log(`${result.deletedCount} document was deleted`);
         return result.deletedCount;
     } catch (error) {
@@ -109,8 +108,8 @@ async function deleteUserByIdDao(req) {
 async function findUserByIdDao(id) {
     try {
         await dbHandler.openConection();
-        //Câu lệnh tìm kiếm
-        const result = await dbHandler.client.db().collection('user_list').findOne({userId: id});
+        //Câu lệnh tìm kiếm user không phải admin
+        const result = await dbHandler.client.db().collection('user_list').findOne({userId: id, role: constant.UserRole});
         console.log(`${JSON.stringify(result)}`);
         return result;
     } catch (error) {
@@ -120,10 +119,15 @@ async function findUserByIdDao(id) {
     }
 }
 
+/**
+ * Find a admin user by id | Return found user
+ * @param {_userName} userName of user 
+ */
 async function findAdminByUserNameDao(_userName){
     try {
         await dbHandler.openConection();
-        const result = await dbHandler.client.db().collection('user_list').findOne({userName: _userName, Role: 1})
+        //Câu lệnh tìm kiếm admin user
+        const result = await dbHandler.client.db().collection('user_list').findOne({userName: _userName, role: constant.AdminRole})
         console.log(`${JSON.stringify(result)}`);
         return result;
     } catch (error) {
@@ -133,5 +137,43 @@ async function findAdminByUserNameDao(_userName){
     }
 }
 
+/**
+ * Find a admin user by id | Return found user
+ * @param {_userName} userName of user 
+ */
+ async function countAdminByUserNameDao(_userName){
+    try {
+        await dbHandler.openConection();
+        //Câu lệnh tìm kiếm admin user
+        const result = await dbHandler.client.db().collection('user_list').countDocuments({userName: _userName, role: constant.AdminRole})
+        console.log(`${JSON.stringify(result)}`);
+        return result;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await dbHandler.closeConnection();
+    }
+}
 
-module.exports = {findAllUserDao, updateUserDao, addNewUserDao, deleteUserByIdDao, findUserByIdDao, findAdminByUserNameDao};
+/**
+ * Find a user by id | Return found user
+ * @param {id} id of user 
+ */
+ async function countUserByIdDao(id) {
+    try {
+        await dbHandler.openConection();
+        //Câu lệnh tìm kiếm user không phải admin
+        const result = await dbHandler.client.db().collection('user_list').count({userId: id, role: constant.UserRole},);
+        console.log(`${JSON.stringify(result)}`);
+        return result;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await dbHandler.closeConnection();
+    }
+}
+
+module.exports = {
+    findAllUserDao, updateUserDao, addNewUserDao, deleteUserByIdDao, findUserByIdDao,
+    findAdminByUserNameDao, countAdminByUserNameDao, countUserByIdDao
+};

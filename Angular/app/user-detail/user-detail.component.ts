@@ -61,12 +61,12 @@ export class UserDetailComponent implements OnInit {
     if(!this.userEditFlag){
       this.userService.insertUser(this.user).subscribe(
         msg => this.message.addMsg(msg),
-        e => this.message.addError(e)
+        e => this.message.addErrorResponse(e)
       );
     } else {
       this.userService.updateUser(this.user).subscribe(
         msg => this.message.addMsg(msg),
-        e => this.message.addError(e)
+        e => this.message.addErrorResponse(e)
       );
     }
   }

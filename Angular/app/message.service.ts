@@ -12,7 +12,11 @@ export class MessageService{
         this.messages.push(msg);
     }
 
-    addError(e){
+    addError(error: string){
+        this.errors.push(error);
+    }
+
+    addErrorResponse(e){
         e.error.forEach(element => {
             this.errors.push(element.msg);
         });

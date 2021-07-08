@@ -35,7 +35,7 @@ export class UserComponent implements OnInit {
   getUser() {
     this.userService.getUsers().subscribe(
       users => this.users = users,
-      error => this.messageService.addError(error)
+      error => this.messageService.addErrorResponse(error)
     )
   }
 

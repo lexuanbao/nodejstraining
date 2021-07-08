@@ -31,7 +31,7 @@ export class userViewChildComponent implements OnInit{
         this.deletedUserId.emit(id);
         this.userService.deleteUser(id).subscribe(
             msg => this.messageService.addMsg(msg),
-            error => this.messageService.addError(error)
+            error => this.messageService.addErrorResponse(error)
         );
     }
 }

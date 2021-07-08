@@ -11,7 +11,10 @@ import { UserService } from "../user.service";
 
 export class LoginComponent implements OnInit {
 
+    userName: string;
+    password: string;
     result: boolean;
+
     constructor(
         private userService: UserService,
         private messageService: MessageService,
@@ -20,12 +23,17 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    LoginButtonOnclick(userName: string, password: string){
-        this.userService.authenticateUser(userName, password).subscribe(result => {
-            this.result = result;
-            if(result){
-                this.router.navigateByUrl('/users')
+    LoginButtonOnclick(){
+        this.userService.authenticateUser(this.userName, this.password).subscribe(
+            result => {
+                this.result = result;
+                if(result){
+                    this.router.navigateByUrl('/users');
+                }
+            }, 
+            e => {
+                this.messageService.addErrorResponse(e);
             }
-        });
+        );
     }
 }

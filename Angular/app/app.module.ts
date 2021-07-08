@@ -10,6 +10,8 @@ import { UserEditChildComponent } from './child-component/userEditChild/userEdit
 import { userViewChildComponent } from './child-component/userViewChild/userViewChild.Component';
 import { MessageComponent } from './messages/message.component';
 import { LoginComponent} from './login/login.component'
+import { FormsModule } from '@angular/forms';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { LoginComponent} from './login/login.component'
     UserEditChildComponent,
     userViewChildComponent,
     MessageComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
