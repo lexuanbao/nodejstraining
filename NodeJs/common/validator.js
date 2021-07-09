@@ -1,5 +1,6 @@
 const validator = require('express-validator')
 const userDao = require('../DAO/UserDao')
+var userAdmin;
 
 //common validate array for user
 const validateUserCommon = [
@@ -10,7 +11,7 @@ const validateUserCommon = [
 ]
 
 /**
- * Validate for user
+ * Validate for regular user
  * @returns array of errors
  */
 exports.validateAddUser = () => {
@@ -36,18 +37,26 @@ exports.validateAddUser = () => {
 exports.validateEditUser = () => {
     return validateUserCommon;
 }
-
+/**
+ * Validate AdminUser when login
+ * @returns array of errors
+ */
 exports.validateLoginUser = () => {
     return [
         validator.check('userName', 'userName must not be empty').exists().bail().trim().notEmpty().bail()
                  .custom(async value => {
-                     user = await userDao.findAdminByUserNameDao(value);
-                     if(user){
-                         return user
-                     } else {
-                        throw new Error('incorrect userName');
+                    userAdmin = await userDao.findAdminByUserNameDao(value);
+                     if(!userAdmin){
+                        throw new Error('Incorrect userName');
                      }
                  }),
         validator.check('password', 'password must not be empty').exists().bail().trim().notEmpty()
+                .custom(async value => {
+                    if(userAdmin.password != value){
+                        throw new Error('Incorrect password');
+                    }
+                }),
+        // validator.check('password', 'password must not be empty').exists().bail().trim().notEmpty().bail()
+        // .equals(this.user.userName).withMessage('Incorrect password') -> không dùng được vì lúc gọi hàm thì giá trị user chưa có
     ]
 }

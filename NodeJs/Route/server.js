@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const userController = require('../Controller/UserController');
 const validator = require('../common/validator')
@@ -13,6 +14,12 @@ app.set("view engine","vash")
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use(session({
+    secret: 'sooper_secret',
+    resave: false,
+    saveUninitialized: false
+  }));
+
 app.use((req, res, next) => {
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     res.header("Access-Control-Allow-Origin", "*");
@@ -21,7 +28,13 @@ app.use((req, res, next) => {
     next(); // Important
 })
 
+var sess; // global session, NOT recommended
+
 app.get('/users', async function (req, res) {
+    sess = req.session;
+    if(!sess.userName) {
+        return res.redirect('/login');
+    }
     result = await userController.findAllUser();
     res.send(result);
 });
@@ -84,6 +97,11 @@ app.post('/login', validator.validateLoginUser(), async function(req, res){
 
     const userName = req.body.userName; // Lấy username từ request
     const password = req.body.password; // Lấy password từ request
+
+    //Gán session
+    sess = req.session;
+    sess.userName = userName;
+
     result = await userController.authenticateUser(userName, password);
     res.json(result);
 })
