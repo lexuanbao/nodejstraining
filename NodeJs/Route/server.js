@@ -4,37 +4,47 @@ const app = express();
 const userController = require('../Controller/UserController');
 const validator = require('../common/validator')
 const { validationResult } = require('express-validator');
+const cors = require('cors');
+
+// var FileStore = require('session-file-store')(session);
+
+app.use(cors({origin: [
+  "http://localhost:4200"
+], credentials: true}));
 
 app.set("view engine","vash")
 
 //Không dùng nữa
 // app.use(bodyParser.urlencoded({ extended: true }))
 // app.use(bodyParser.json())
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use(session({
-    secret: 'sooper_secret',
+app.use(session({ secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
-  }));
+    store: new FileStore,
+    saveUninitialized: false ,
+    cookie: { maxAge: 3600000,secure: false, httpOnly: true }
+  })
+);
 
-app.use((req, res, next) => {
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
-    next(); // Important
-})
+//Đoạn code dùng để nối nodejs và angular vì đang ở 2 port khác nhau
+// app.use((req, res, next) => {
+//     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+//     next(); // Important
+// }) 
 
 var sess; // global session, NOT recommended
 
 app.get('/users', async function (req, res) {
-    sess = req.session;
-    if(!sess.userName) {
-        return res.redirect('/login');
-    }
+
+    // sess = req.session;
+    // if(!sess.userName) {
+    //     return res.redirect('/login');
+    // }
     result = await userController.findAllUser();
     res.send(result);
 });
@@ -99,8 +109,8 @@ app.post('/login', validator.validateLoginUser(), async function(req, res){
     const password = req.body.password; // Lấy password từ request
 
     //Gán session
-    sess = req.session;
-    sess.userName = userName;
+    // sess = req.session;
+    // sess.userName = userName;
 
     result = await userController.authenticateUser(userName, password);
     res.json(result);

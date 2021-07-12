@@ -12,7 +12,9 @@ import { MessageService } from '../message.service';
 export class UserComponent implements OnInit {
   userEdited: User;
   users: User[] = [];
-  
+  p;
+  maxSsize = 6;
+
   constructor(
     private userService: UserService,
     private router: Router,
@@ -29,7 +31,6 @@ export class UserComponent implements OnInit {
 
   setUserEdit(_user){
     this.userEdited = _user;
-    this.getUser();
   }
 
   getUser() {

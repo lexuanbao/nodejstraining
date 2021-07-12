@@ -1,14 +1,17 @@
 <p>user works!</p>
-<div *ngFor = 'let user of users'>
+<div *ngFor = 'let user of users | paginate: { itemsPerPage: 3, currentPage: p }'>
     <!--Component childUserEdit sẽ hiển thị khi editFlag = true-->
     <div *ngIf='user.editFlag==true; else elseBlock'>
         <child-user-edit [user]='user' (userChange)="setUserEdit($event)"></child-user-edit>
     </div>
-    <!--Component childUserEdit sẽ hiển thị khi editFlag = false hoặc undefine-->
+    <!--Component childUserView sẽ hiển thị khi editFlag = false hoặc undefine-->
     <ng-template #elseBlock>
         <child-user-view [user]='user' (deletedUserId)="deleteUserFromArray($event)"></child-user-view>
     </ng-template>
 </div>
+<pagination-controls (pageChange)="p = $event" maxSize=5 >
+</pagination-controls>
+
 <button (click)='AddButtonOnclick()'>Add</button><br/>
 
 

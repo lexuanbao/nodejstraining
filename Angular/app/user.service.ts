@@ -17,7 +17,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]>{
-    return this.http.get<User[]>(this.userURL + '/users');
+    return this.http.get<User[]>(this.userURL + '/users', { withCredentials: true});
   }
 
   updateUser(user: User): Observable<any>{

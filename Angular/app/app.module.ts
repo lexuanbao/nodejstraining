@@ -12,6 +12,7 @@ import { MessageComponent } from './messages/message.component';
 import { LoginComponent} from './login/login.component'
 import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from './logout/logout.component';
+import {NgxPaginationModule} from 'ngx-pagination'
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { LogoutComponent } from './logout/logout.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
