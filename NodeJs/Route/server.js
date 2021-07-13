@@ -6,7 +6,7 @@ const validator = require('../common/validator')
 const { validationResult } = require('express-validator');
 const cors = require('cors');
 
-// var FileStore = require('session-file-store')(session);
+var FileStore = require('session-file-store')(session);
 
 app.use(cors({origin: [
   "http://localhost:4200"
@@ -17,6 +17,7 @@ app.set("view engine","vash")
 //Không dùng nữa
 // app.use(bodyParser.urlencoded({ extended: true }))
 // app.use(bodyParser.json())
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -24,7 +25,7 @@ app.use(session({ secret: 'keyboard cat',
     resave: false,
     store: new FileStore,
     saveUninitialized: false ,
-    cookie: { maxAge: 3600000,secure: false, httpOnly: true }
+    cookie: { maxAge: 1800000, secure: false, httpOnly: true }
   })
 );
 
@@ -41,10 +42,10 @@ var sess; // global session, NOT recommended
 
 app.get('/users', async function (req, res) {
 
-    // sess = req.session;
-    // if(!sess.userName) {
-    //     return res.redirect('/login');
-    // }
+    sess = req.session;
+    if(sess && !sess.userName) {
+        return res.status(403).send({redirect: '/login'});
+    }
     result = await userController.findAllUser();
     res.send(result);
 });
@@ -108,12 +109,27 @@ app.post('/login', validator.validateLoginUser(), async function(req, res){
     const userName = req.body.userName; // Lấy username từ request
     const password = req.body.password; // Lấy password từ request
 
-    //Gán session
-    // sess = req.session;
-    // sess.userName = userName;
+    // Gán session
+    sess = req.session;
+    sess.userName = userName;
 
     result = await userController.authenticateUser(userName, password);
     res.json(result);
+})
+
+app.post('/logout', async function(req, res){
+    if(!req.session.userName){
+        res.status(400).send({error: "can't logout"})
+        return;
+    }
+
+    req.session.destroy(err => {
+        if(err) {
+            res.status(400).send({error: "can't logout"})
+        } else {
+            res.status(200).send({msg: "logout succesfull"})
+        }
+    });
 })
 
 var server = app.listen(5000, function () {

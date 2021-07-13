@@ -13,6 +13,7 @@ import { LoginComponent} from './login/login.component'
 import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from './logout/logout.component';
 import {NgxPaginationModule} from 'ngx-pagination'
+import { UserPermissionGuard } from './guard/user-permission.guard';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import {NgxPaginationModule} from 'ngx-pagination'
     FormsModule,
     NgxPaginationModule
   ],
-  providers: [],
+  providers: [UserPermissionGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

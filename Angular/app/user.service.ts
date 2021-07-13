@@ -7,7 +7,7 @@ import { User } from './user';
   providedIn: 'root'
 })
 export class UserService {
-
+  userPermission = false;
   private userURL = 'http://localhost:5000';
 
   httpOptions = {
@@ -17,7 +17,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]>{
-    return this.http.get<User[]>(this.userURL + '/users', { withCredentials: true});
+    return this.http.get<User[]>(this.userURL + '/users', { withCredentials: true}); //withCredentials: true khiến cho angular sẽ gắn cookies khi thực hiện request => thực hiện đuóc session
   }
 
   updateUser(user: User): Observable<any>{
@@ -37,7 +37,11 @@ export class UserService {
   }
 
   authenticateUser(_userName: string, _password: string): Observable<boolean>{
-    return this.http.post<boolean>(this.userURL + '/login', {userName: _userName, password: _password});
+    return this.http.post<boolean>(this.userURL + '/login', {userName: _userName, password: _password}, { withCredentials: true});
+  }
+
+  logoutUser(): Observable<any>{
+    return this.http.post(this.userURL + '/logout', {}, {withCredentials: true});
   }
 
   // handleError(error: HttpErrorResponse) {

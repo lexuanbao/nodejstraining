@@ -13,7 +13,6 @@ export class LoginComponent implements OnInit {
 
     userName: string;
     password: string;
-    result: boolean;
 
     constructor(
         private userService: UserService,
@@ -26,11 +25,11 @@ export class LoginComponent implements OnInit {
     LoginButtonOnclick(){
         this.userService.authenticateUser(this.userName, this.password).subscribe(
             result => {
-                this.result = result;
                 if(result){
+                    this.userService.userPermission = true;
                     this.router.navigateByUrl('/users');
-                }
-            }, 
+                } 
+            },
             e => {
                 this.messageService.addErrorResponse(e);
             }
